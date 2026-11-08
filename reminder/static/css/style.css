@@ -1,0 +1,254 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #59634A;
+    color: #C69A19;
+    min-height: 100vh;
+}
+
+header {
+    padding: 25px 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+    color: #C69A19;
+}
+
+.main {
+    max-width: 750px;
+    margin: 70px auto;
+    padding: 20px;
+}
+
+.greeting {
+    font-size: 38px;
+    margin-bottom: 12px;
+    color: #c59026;
+}
+
+.subtitle {
+    color: #9A907B;
+    margin-bottom: 35px;
+    font-size: 17px;
+}
+
+.add-task {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px;
+    background:#fafaf8;
+    border: 1px solid #F0E5C6;
+    border-radius: 14px;
+    font-size: 17px;
+    color: #92866B;
+    cursor: pointer;
+    box-shadow: 0 5px 25px #9C812015;
+}
+
+.plus {
+    background: #cea426;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    font-size: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-section {
+    margin-top: 45px;
+}
+
+.task-section h2 {
+    margin-bottom: 20px;
+    color: #cf9c36;
+}
+
+.task-item {
+    background: #FFFFFF;
+    padding: 18px;
+    border: 1px solid #F0E5C6;
+    border-radius: 12px;
+    margin-bottom: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    box-shadow: 0 4px 15px #9C812010;
+}
+
+.task-item input {
+    margin-top: 4px;
+    accent-color: #D5A91E;
+}
+
+.task-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.task-content h3 {
+    font-size: 17px;
+    margin-bottom: 6px;
+    color: #3D3525;
+}
+
+.task-content p {
+    color: #8F8877;
+    font-size: 14px;
+    margin-bottom: 8px;
+    overflow-wrap: anywhere;
+}
+
+.task-content small {
+    color: #B18A19;
+}
+
+.completed h3 {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.delete-btn {
+    border: none;
+    background: none;
+    color: #B56B50;
+    font-size: 35px;
+    cursor: pointer;
+}
+
+.empty {
+    color: #A49B87;
+    text-align: center;
+    padding: 25px;
+    font-size: 20px;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: #30271480;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    z-index: 10;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-box {
+    background: #464e3b;
+    width: 100%;
+    max-width: 480px;
+    padding: 28px;
+    border-radius: 18px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.modal-header h2 {
+    font-size: 30px;
+    color: #d1b567;
+}
+
+.close {
+    border: none;
+    background: none;
+    font-size: 40px;
+    cursor: pointer;
+    color: #13110d;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 17px;
+    font-weight: bold;
+    color: #F2D27A;
+    margin-bottom: 9px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #E9DDBB;
+    border-radius: 9px;
+    font-size: 15px;
+    outline: none;
+    font-family: inherit;
+    background: #faf9f5;
+    color: #3D3525;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #D5A91E;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.form-actions button {
+    padding: 12px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.cancel {
+    background: white;
+    border: 1px solid #E9DDBB;
+    color: #6E6247;
+}
+
+.save {
+    background: #b18d21;
+    color: white;
+    border: none;
+}
+
+@media(max-width: 600px) {
+    .main {
+        margin: 40px auto;
+    }
+
+    .greeting {
+        font-size: 30px;
+    }
+}
