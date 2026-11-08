@@ -1,11 +1,186 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>RemindX</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h1>hello</h1>
+
+    <header>
+        <div class="logo">RemindX</div>
+    </header>
+
+    <main class="main">
+
+        <h1 class="greeting" id="greeting"></h1>
+
+        <p class="subtitle">Let's make today productive.</p>
+
+        <button class="add-task" onclick="openModal()">
+            <span>Add a task...</span>
+            <span class="plus">+</span>
+        </button>
+
+        <section class="task-section">
+            <h2>My Tasks</h2>
+
+            <div id="taskList">
+                <p class="empty">No tasks added yet.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="modal" id="taskModal">
+
+        <div class="modal-box">
+
+            <div class="modal-header">
+                <h2>Add New Task</h2>
+                <button class="close" onclick="closeModal()">×</button>
+            </div>
+
+            <form id="taskForm">
+
+                <div class="form-group">
+                    <label>Task Title</label>
+                    <input type="text" id="title" placeholder="Enter task title" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="description" placeholder="Write task details..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Time</label>
+                    <input type="time" id="time" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button"  class="cancel" onclick="closeModal()" >Cancel</button>
+
+                    <button type="submit" class="save">Save Task</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+
+        function updateGreeting() {
+
+            let hour = new Date().getHours();
+            let greeting = "";
+
+            if (hour >= 5 && hour < 12) {
+                greeting = "Good Morning 🍽";
+            }
+            else if (hour >= 12 && hour < 17) {
+                greeting = "Good Afternoon ☀️";
+            }
+            else if (hour >= 17 && hour < 21) {
+                greeting = "Good Evening 🌅";
+            }
+            else {
+                greeting = "Good Night 🌙";
+            }
+
+            document.getElementById("greeting").innerText = greeting;
+        }
+
+        updateGreeting();
+
+        function openModal() {
+            document.getElementById("taskModal").classList.add("active");
+        }
+
+        function closeModal() {
+            document.getElementById("taskModal").classList.remove("active");
+            document.getElementById("taskForm").reset();
+        }
+
+
+        document.getElementById("taskForm").addEventListener("submit",function(event) {
+                event.preventDefault();
+
+                let title = document.getElementById("title").value.trim();
+                let description = document.getElementById("description").value.trim();
+                let date = document.getElementById("date").value;
+                let time = document.getElementById("time").value;
+
+                if (!title || !date || !time) {
+                    return;
+                }
+
+                let taskList = document.getElementById("taskList");
+
+                if (taskList.querySelector(".empty")) {
+                    taskList.innerHTML = "";
+                }
+
+                let div = document.createElement("div");
+                div.className = "task-item";
+
+                let checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+
+                let content = document.createElement("div");
+                content.className = "task-content";
+
+                let heading = document.createElement("h3");
+                heading.textContent = title;
+
+                let desc = document.createElement("p");
+                desc.textContent = description || "No description";
+
+                let schedule = document.createElement("small");
+                schedule.textContent = "📅 " + date + " | ⏰ " + time;
+
+                content.append(heading, desc, schedule);
+
+                checkbox.addEventListener("change", function() {
+                    div.classList.toggle("completed", checkbox.checked);
+                });
+
+                let deleteBtn = document.createElement("button");
+                deleteBtn.className = "delete-btn";
+                deleteBtn.textContent = "×";
+
+                deleteBtn.addEventListener("click", function() {
+                    div.remove();
+
+                    if (taskList.children.length === 0) {
+                        taskList.innerHTML =
+                            '<p class="empty">No tasks added yet.</p>';
+                    }
+                });
+
+                div.append(checkbox, content, deleteBtn);
+
+                taskList.appendChild(div);
+                closeModal();
+            });
+
+        document.getElementById("taskModal").addEventListener(
+            "click",
+            function(event) {
+                if (event.target === this) {
+                    closeModal();
+                }
+            });
+
+    </script>
+
 </body>
 </html>
