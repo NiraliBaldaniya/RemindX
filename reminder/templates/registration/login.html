@@ -1,0 +1,51 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - RemindX</title>
+
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+
+<body>
+
+    <div class="main-container">
+        <div class="image-section">
+            <img src="{% static 'images/1.png' %}" alt="RemindX Illustration">
+        </div>
+
+        <div class="login-section">
+            <h1>Remind<span>X</span></h1>
+            <h2>Welcome Back!</h2>
+
+            <div class="login-options">
+                <button class="login-btn google-btn">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+                    Continue with Google
+                </button>
+
+                <button class="login-btn github-btn" type="button">
+                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" alt="GitHub Logo">
+                    Continue with Github
+                </button>
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <button class="login-btn email-btn" type="button" onclick="showEmailForm()">
+                     <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/envelope.svg"  alt="Email" >
+                    Continue with Email
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
