@@ -7,3 +7,14 @@ class Task(models.Model):
     time = models.TimeField()
     is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+
+class EmailOTP(models.Model):
+    email = models.EmailField()
+    otp_hash = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    def __str__(self):
+        return self.email

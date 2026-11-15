@@ -92,6 +92,10 @@ body {
     object-fit: contain;
 }
 
+.google-btn:hover {
+    background-color: rgb(216, 219, 219);
+}
+
 .github-btn {
     display: flex;
     align-items: center;
@@ -105,19 +109,29 @@ body {
     object-fit: contain;
 }
 
+.github-btn:hover {
+    background-color: rgb(216, 219, 219);
+}
+
 .email-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    background-color: #d3aa42;
+    color: white;
+    font-size: 16px;
+    background-color: #59634b;
 }
-
 
 .email-btn img {
     width: 28px;
     height: 28px;
+    filter: brightness(0) invert(1);
     object-fit: contain;
+}
+
+.email-btn:hover {
+    background-color: #bd8d16;
 }
 
 .divider {
@@ -137,6 +151,31 @@ body {
     background-color: #ddd;
 }
 
+#emailForm {
+    width: 100%;
+    max-width: 350px;
+    margin-top: 25px;
+}
+
+#emailForm input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 18px;
+    border: 1px solid #d5d2c5;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+#emailForm input:focus {
+    border-color: #59634b;
+}
+
+#emailForm input::placeholder {
+    color: #999999;
+}
 
 @media (max-width: 750px) {
 

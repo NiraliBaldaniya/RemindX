@@ -22,30 +22,63 @@
             <h1>Remind<span>X</span></h1>
             <h2>Welcome Back!</h2>
 
-            <div class="login-options">
+            <div class="login-options" id="loginOptions">
                 <button class="login-btn google-btn">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
                     Continue with Google
                 </button>
 
                 <button class="login-btn github-btn" type="button">
-                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" alt="GitHub Logo">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
+                        alt="GitHub Logo">
                     Continue with Github
                 </button>
 
                 <div class="divider">
                     <span>OR</span>
                 </div>
-
-                <button class="login-btn email-btn" type="button" onclick="showEmailForm()">
-                     <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/envelope.svg"  alt="Email" >
-                    Continue with Email
-                </button>
             </div>
+
+            <form id="emailForm" method="POST">
+                {% csrf_token %}
+
+                <input type="email" name="email" placeholder="Enter your email address" required>
+
+                <button class="login-btn email-btn" type="submit">
+                    <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/envelope.svg" alt="Email">Continue with Email</button>
+
+            </form>
 
         </div>
     </div>
 
 </body>
+
+<script>
+
+    const form = document.getElementById("emailForm");
+
+    form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+    
+    const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+    const formData = new FormData(form);
+
+        const response = await fetch("/email_login/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) {
+                console.log(data)
+        }
+    })
+
+</script>
 
 </html>

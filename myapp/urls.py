@@ -1,8 +1,9 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from reminder.views import home
+from reminder.views import login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',home)
+    path('', include('reminder.urls')),
 ]
