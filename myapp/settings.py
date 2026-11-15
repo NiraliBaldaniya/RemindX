@@ -1,6 +1,10 @@
 from pathlib import Path
 import os
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
 ALLOWED_HOSTS = []
 
 
@@ -51,9 +55,13 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'remindx_db',
+        'USER': 'root',
+        'PASSWORD': 'nirali@878035',
+        'HOST': 'localhost',
+        'PORT': '3306',
+}
 }
 
 
