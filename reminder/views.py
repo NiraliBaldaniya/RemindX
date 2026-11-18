@@ -6,6 +6,7 @@ from secrets import randbelow
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
 
 def home(request):
     return render(request,'index.html')
@@ -13,26 +14,68 @@ def home(request):
 def login(request):
     return render(request,'registration/login.html')
 
+# @require_POST
+# def email_login(request):
+
+#     email = request.POST.get('email')
+#     if not email:
+#         return JsonResponse({
+#             'error': 'Email is required'
+#             }, status=400)
+
+#     otp = str(randbelow(900000)+ (100000))
+    
+#     expires_at = timezone.now() + timedelta(minutes=5)
+
+#     EmailOTP.objects.create(
+#         email=email,
+#         otp_hash = make_password(otp),
+#         expires_at = expires_at
+#     )
+
+#     return JsonResponse({
+#         'success': True
+#         })
+
 @require_POST
 def email_login(request):
 
     email = request.POST.get('email')
+
     if not email:
         return JsonResponse({
             'error': 'Email is required'
-            }, status=400)
+        }, status=400)
 
-    otp = str(randbelow(900000)+ (100000))
-    
-    expires_at = timezone.now() + timedelta(minutes=5)
+    otp = str(randbelow(900000) + 100000)
 
-    EmailOTP.objects.create(
+    expires_at = timezone.now() + timedelta(minutes=20)
+
+    otp_record = EmailOTP.objects.create(
         email=email,
-        otp_hash = make_password(otp),
-        expires_at = expires_at
+        otp_hash=make_password(otp),
+        expires_at=expires_at
     )
 
-    return JsonResponse({
-        'success': True
-        })
+    try:
+        send_mail(
+            subject='RemindX Login OTP',
+            message=f'Your RemindX OTP is {otp}. It expires in 20 minutes.',
+            from_email=None,
+            recipient_list=[email],
+            fail_silently=False
+        )
+    except Exception as e:
+        print("EMAIL ERROR:", repr(e))
 
+        otp_record.delete()
+
+        return JsonResponse({
+            'success': False,
+            'error': 'Unable to send OTP email'
+        }, status=500)
+
+    return JsonResponse({
+        'success': True,
+        'message': 'OTP sent successfully'
+    })
