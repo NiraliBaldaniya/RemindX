@@ -20,9 +20,9 @@
 
         <div class="login-section">
             <h1>Remind<span>X</span></h1>
-            <h2>Welcome Back!</h2>
 
             <div class="login-options" id="loginOptions">
+                <h2>Welcome Back!</h2>
                 <button class="login-btn google-btn">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
                     Continue with Google
@@ -30,25 +30,45 @@
 
                 <button class="login-btn github-btn" type="button">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
-                        alt="GitHub Logo">
-                    Continue with Github
-                </button>
+                        alt="GitHub Logo">Continue with Github</button>
 
                 <div class="divider">
                     <span>OR</span>
                 </div>
+
+                <form id="emailForm" method="POST">
+                    {% csrf_token %}
+
+                    <input type="email" name="email" placeholder="Enter your email address" required>
+
+                    <button class="login-btn email-btn" type="submit">
+                        <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/envelope.svg"
+                            alt="Email">Continue with Email</button>
+                </form>
             </div>
 
-            <form id="emailForm" method="POST">
-                {% csrf_token %}
 
-                <input type="email" name="email" placeholder="Enter your email address" required>
+            <div class="container" id="container" style="display: none;">
+                <h3 class="title">OTP Verification</h3>
+                <p class="sub-title">Enter the OTP you received to</p>
 
-                <button class="login-btn email-btn" type="submit">
-                    <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/envelope.svg" alt="Email">Continue with Email</button>
+                <div class="wrapper">
+                    <input type="text" class="field 1" maxlength="1">
+                    <input type="text" class="field 2" maxlength="1">
+                    <input type="text" class="field 3" maxlength="1">
+                    <input type="text" class="field 4" maxlength="1">
+                    <input type="text" class="field 5" maxlength="1">
+                    <input type="text" class="field 6" maxlength="1">
+                </div>
 
-            </form>
+                <form style="display: none;">
+                    {% csrf_token %}
+                </form>
 
+                <button class="verify">Verify Me</button>
+                <p id="message" name="otp"></p>
+
+            </div>
         </div>
     </div>
 
@@ -57,13 +77,78 @@
 <script>
 
     const form = document.getElementById("emailForm");
+    const otp_verification = document.getElementById("container")
+    const loginOptions = document.getElementById("loginOptions")
+    const fields = document.querySelectorAll(".field")
+    const message = document.querySelector("#message")
 
-    form.addEventListener("submit", async function(event) {
+    fields[0].focus();
 
-    event.preventDefault();
-    
-    const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
-    const formData = new FormData(form);
+    fields.forEach((field, index) => {
+        field.addEventListener("input", () => {
+            field.value = field.value.replace(/[^0-9]/g, "")
+            if (field.value != "" && index < fields.length - 1) {
+                fields[index + 1].focus()
+            }
+        })
+
+        field.addEventListener("keydown", (event) => {
+            if (event.key === "Backspace" && field.value === "" && index > 0) {
+                fields[index - 1].focus()
+            }
+        })
+
+        field.addEventListener("paste", (event) => {
+            event.preventDefault();
+
+            const pasted = event.clipboardData.getData("text").replace(/\D/g, "").slice(0, fields.length);
+
+            pasted.split("").forEach((digit, i) => {
+                fields[i].value = digit;
+            });
+
+            fields[Math.min(pasted.length, fields.length - 1)].focus();
+        });
+    });
+
+
+
+    document.querySelector(".verify").addEventListener("click", async function () {
+
+        const otp = Array.from(document.querySelectorAll(".field")).map(input => input.value).join("");
+
+        const formData = new FormData();
+        formData.append("otp", otp);
+
+        const csrfToken = form.querySelector(
+            "[name=csrfmiddlewaretoken]"
+        ).value;
+
+        const response = await fetch("/otp_verification/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        message.textContent = data.message;
+
+        if (response.ok && data.success) {
+            console.log("OTP verified successfully");
+        }
+    });
+
+
+
+    form.addEventListener("submit", async function (event) {
+
+        event.preventDefault();
+
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+        const formData = new FormData(form);
 
         const response = await fetch("/email_login/", {
             method: "POST",
@@ -75,7 +160,9 @@
 
         const data = await response.json();
         if (response.ok && data.success) {
-                console.log(data)
+            console.log(data)
+            otp_verification.style.display = "flex";
+            loginOptions.style.display = "none";
         }
     })
 
