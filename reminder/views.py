@@ -7,9 +7,19 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.hashers import make_password,check_password
 from django.core.mail import send_mail
+import re
+
 
 def home(request):
-    return render(request,'index.html')
+    email = request.session.get("verified_email")
+
+    name = email.split("@")[0] if email else "there"
+    name = re.sub(r'\d+$', '', name)
+
+    return render(request, 'index.html', {
+        'name': name
+    })
+
 
 def login(request):
     return render(request,'registration/login.html')
@@ -54,9 +64,11 @@ def email_login(request):
         }, status=500)
     
     request.session["otp_email"] = email
+
     return JsonResponse({
         'success': True,
-        'message': 'OTP sent successfully'
+        'message': 'OTP sent successfully',
+        'email' : email,
     })
 
 @require_POST

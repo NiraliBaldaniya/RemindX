@@ -6,4 +6,5 @@ from reminder.views import login
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('reminder.urls')),
+    path('accounts/', include('allauth.urls')),
 ]
