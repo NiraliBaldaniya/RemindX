@@ -1,4 +1,5 @@
 {% load static %}
+{% load socialaccount %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,10 +24,16 @@
 
             <div class="login-options" id="loginOptions">
                 <h2>Welcome Back!</h2>
-                <button class="login-btn google-btn">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
-                    Continue with Google
-                </button>
+
+                
+                <form action="{% provider_login_url 'google'%}" method="POST">
+                    {% csrf_token %}
+                    <button class="login-btn google-btn" type="submit">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+                        Continue with Google
+                    </button>
+                </form>
+
 
                 <button class="login-btn github-btn" type="button">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
@@ -138,6 +145,7 @@
 
         if (response.ok && data.success) {
             console.log("OTP verified successfully");
+            window.location.href = "/home/"
         }
     });
 
