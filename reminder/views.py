@@ -8,17 +8,18 @@ from datetime import timedelta
 from django.contrib.auth.hashers import make_password,check_password
 from django.core.mail import send_mail
 import re
+from django.contrib.auth import get_user_model, login as auth_login
+from django.utils.text import slugify
+from django.utils.crypto import get_random_string
 
 
 def home(request):
-    email = request.session.get("verified_email")
+    email = request.user.email
 
     name = email.split("@")[0] if email else "there"
     name = re.sub(r'\d+$', '', name)
 
-    return render(request, 'index.html', {
-        'name': name
-    })
+    return render(request, 'index.html', {'name': name })
 
 
 def login(request):
@@ -44,6 +45,8 @@ def email_login(request):
         otp_hash=make_password(otp),
         expires_at=expires_at
     )
+
+    EmailOTP.objects.filter( expires_at__lte=timezone.now()).delete()
 
     try:
         send_mail(
@@ -106,15 +109,35 @@ def otp_verification(request):
             "message": "OTP has expired"
         }, status=400)
 
+
     if not check_password(otp, verify.otp_hash):
         return JsonResponse({
             "success": False,
             "message": "Incorrect OTP"
         }, status=400)
 
+
+    User = get_user_model()
+
+    user = User.objects.filter(email__iexact=email).first()
+
+    if user is None:
+
+        base_username = slugify(email.split("@")[0])[:120] or "Remindian"
+        username = base_username
+
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}_{get_random_string(6)}"
+
+        user = User.objects.create_user(
+            username=username,
+            email=email
+        )   
+
+    auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+
     verify.delete()
 
-    request.session["verified_email"] = email
     request.session.pop("otp_email", None)
 
     return JsonResponse({
