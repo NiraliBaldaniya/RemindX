@@ -25,7 +25,7 @@
             <div class="login-options" id="loginOptions">
                 <h2>Welcome Back!</h2>
 
-                
+
                 <form action="{% provider_login_url 'google'%}" method="POST">
                     {% csrf_token %}
                     <button class="login-btn google-btn" type="submit">
@@ -35,9 +35,13 @@
                 </form>
 
 
-                <button class="login-btn github-btn" type="button">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
-                        alt="GitHub Logo">Continue with Github</button>
+                <form action="{% provider_login_url 'github' %}" method="POST">
+                    {% csrf_token %}
+                    <button class="login-btn github-btn" type="submit">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
+                            alt="GitHub Logo">Continue with Github</button>
+                </form>
+
 
                 <div class="divider">
                     <span>OR</span>
