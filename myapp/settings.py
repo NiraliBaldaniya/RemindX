@@ -82,6 +82,12 @@ SOCIALACCOUNT_PROVIDERS = {
             "access_type": "online",
         },
         "EMAIL_AUTHENTICATION": True,
+    },
+    'github': {
+        'SCOPE': [
+            'read:user',
+            'user:email',
+        ],
     }
 }
 
