@@ -1,22 +1,41 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemindX</title>
+    <title>Home | RemindX</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
 
     <header>
         <div class="logo">RemindX</div>
+
+        <div class="profile-container">
+            <button class="profile-icon" onclick="toggleProfile()">
+                {{ name|first|upper }}
+            </button>
+
+            <div class="profile-dropdown" id="profileDropdown">
+                <h3>{{ name }}</h3>
+                <p>{{ request.user.email }}</p>
+                <hr>
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <span><a href="{% url 'logout' %}">Log Out</a></span>
+                </form>
+            </div>
+        </div>
     </header>
+
 
     <main class="main">
 
-        <h1 class="greeting" id="greeting"></h1>
-
+        <h2 id="greeting" data-name="{{ name }}"></h2>
         <p class="subtitle">Let's make today productive.</p>
 
         <button class="add-task" onclick="openModal()">
@@ -66,7 +85,7 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="button"  class="cancel" onclick="closeModal()" >Cancel</button>
+                    <button type="button" class="cancel" onclick="closeModal()">Cancel</button>
 
                     <button type="submit" class="save">Save Task</button>
                 </div>
@@ -81,19 +100,21 @@
         function updateGreeting() {
 
             let hour = new Date().getHours();
+            const name = document.getElementById("greeting").dataset.name;
+
             let greeting = "";
 
             if (hour >= 5 && hour < 12) {
-                greeting = "Good Morning 🍽";
+                greeting = `Good Morning ${name} 🍽️`;
             }
             else if (hour >= 12 && hour < 17) {
-                greeting = "Good Afternoon ☀️";
+                greeting = `Good Afternoon ${name} ☀️`;
             }
             else if (hour >= 17 && hour < 21) {
-                greeting = "Good Evening 🌅";
+                greeting = `Good Evening ${name} 🌅`;
             }
             else {
-                greeting = "Good Night 🌙";
+                greeting = `Good Night ${name} 🌙`;
             }
 
             document.getElementById("greeting").innerText = greeting;
@@ -111,74 +132,92 @@
         }
 
 
-        document.getElementById("taskForm").addEventListener("submit",function(event) {
-                event.preventDefault();
+        document.getElementById("taskForm").addEventListener("submit", function (event) {
+            event.preventDefault();
 
-                let title = document.getElementById("title").value.trim();
-                let description = document.getElementById("description").value.trim();
-                let date = document.getElementById("date").value;
-                let time = document.getElementById("time").value;
+            let title = document.getElementById("title").value.trim();
+            let description = document.getElementById("description").value.trim();
+            let date = document.getElementById("date").value;
+            let time = document.getElementById("time").value;
 
-                if (!title || !date || !time) {
-                    return;
-                }
+            if (!title || !date || !time) {
+                return;
+            }
 
-                let taskList = document.getElementById("taskList");
+            let taskList = document.getElementById("taskList");
 
-                if (taskList.querySelector(".empty")) {
-                    taskList.innerHTML = "";
-                }
+            if (taskList.querySelector(".empty")) {
+                taskList.innerHTML = "";
+            }
 
-                let div = document.createElement("div");
-                div.className = "task-item";
+            let div = document.createElement("div");
+            div.className = "task-item";
 
-                let checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
+            let checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
 
-                let content = document.createElement("div");
-                content.className = "task-content";
+            let content = document.createElement("div");
+            content.className = "task-content";
 
-                let heading = document.createElement("h3");
-                heading.textContent = title;
+            let heading = document.createElement("h3");
+            heading.textContent = title;
 
-                let desc = document.createElement("p");
-                desc.textContent = description || "No description";
+            let desc = document.createElement("p");
+            desc.textContent = description || "No description";
 
-                let schedule = document.createElement("small");
-                schedule.textContent = "📅 " + date + " | ⏰ " + time;
+            let schedule = document.createElement("small");
+            schedule.textContent = "📅 " + date + " | ⏰ " + time;
 
-                content.append(heading, desc, schedule);
+            content.append(heading, desc, schedule);
 
-                checkbox.addEventListener("change", function() {
-                    div.classList.toggle("completed", checkbox.checked);
-                });
-
-                let deleteBtn = document.createElement("button");
-                deleteBtn.className = "delete-btn";
-                deleteBtn.textContent = "×";
-
-                deleteBtn.addEventListener("click", function() {
-                    div.remove();
-
-                    if (taskList.children.length === 0) {
-                        taskList.innerHTML =
-                            '<p class="empty">No tasks added yet.</p>';
-                    }
-                });
-
-                div.append(checkbox, content, deleteBtn);
-
-                taskList.appendChild(div);
-                closeModal();
+            checkbox.addEventListener("change", function () {
+                div.classList.toggle("completed", checkbox.checked);
             });
+
+            let deleteBtn = document.createElement("button");
+            deleteBtn.className = "delete-btn";
+            deleteBtn.textContent = "×";
+
+            deleteBtn.addEventListener("click", function () {
+                div.remove();
+
+                if (taskList.children.length === 0) {
+                    taskList.innerHTML =
+                        '<p class="empty">No tasks added yet.</p>';
+                }
+            });
+
+            div.append(checkbox, content, deleteBtn);
+
+            taskList.appendChild(div);
+            closeModal();
+        });
 
         document.getElementById("taskModal").addEventListener(
             "click",
-            function(event) {
+            function (event) {
                 if (event.target === this) {
                     closeModal();
                 }
             });
+
+
+        function toggleProfile() {
+            document.getElementById("profileDropdown")
+                .classList.toggle("active");
+        }
+
+        document.addEventListener("click", function (event) {
+
+            const profile = document.querySelector(".profile-container");
+            const dropdown = document.getElementById("profileDropdown");
+
+            if (!profile.contains(event.target)) {
+                dropdown.classList.remove("active");
+            }
+
+        });
+
 
     </script>
 

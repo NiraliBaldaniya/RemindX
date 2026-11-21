@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from .models import EmailOTP
@@ -8,15 +8,16 @@ from datetime import timedelta
 from django.contrib.auth.hashers import make_password,check_password
 from django.core.mail import send_mail
 import re
-from django.contrib.auth import get_user_model, login as auth_login
+from django.contrib.auth import get_user_model, login as auth_login,logout
 from django.utils.text import slugify
 from django.utils.crypto import get_random_string
+from django.contrib.auth.decorators import login_required
 
-
+@login_required(login_url='/')
 def home(request):
     email = request.user.email
 
-    name = email.split("@")[0] if email else "there"
+    name = email.split("@")[0] if email else "Remindian"
     name = re.sub(r'\d+$', '', name)
 
     return render(request, 'index.html', {'name': name })
@@ -24,6 +25,11 @@ def home(request):
 
 def login(request):
     return render(request,'registration/login.html')
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('/')
 
 
 @require_POST
@@ -51,7 +57,7 @@ def email_login(request):
     try:
         send_mail(
             subject='RemindX Login OTP',
-            message=f'Your RemindX OTP is {otp}. It expires in 20 minutes.',
+            message=f'Hello, Remindian. Your RemindX OTP is {otp}. It expires in 20 minutes.',
             from_email=None,  # use app email
             recipient_list=[email],  #user email
             fail_silently=False  #display error

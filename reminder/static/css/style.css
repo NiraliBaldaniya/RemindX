@@ -243,6 +243,57 @@ header {
     border: none;
 }
 
+.profile-container {
+    position: relative;
+}
+
+.profile-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: #C69A19;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 45px;
+    width: 320px;
+    padding: 18px;
+    background: white;
+    color: #333;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    z-index: 100;
+}
+
+.profile-dropdown.active {
+    display: block;
+}
+
+.profile-dropdown p {
+    font-size: 17px;
+    color: gray;
+    overflow-wrap: anywhere;
+}
+
+.profile-dropdown form span{
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 7px;
+}
+
+.profile-dropdown form span a{
+    text-decoration: none;
+}
+
+
 @media(max-width: 600px) {
     .main {
         margin: 40px auto;

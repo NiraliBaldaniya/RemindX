@@ -6,4 +6,5 @@ urlpatterns = [
     path('email_login/',views.email_login,name="emaillogin"),
     path('otp_verification/',views.otp_verification,name="otp_verification"),
     path('home/',views.home,name="home page"),
+    path('logout/', views.user_logout, name='logout'),
 ]
