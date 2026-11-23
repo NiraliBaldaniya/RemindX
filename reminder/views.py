@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
-from .models import EmailOTP
+from .models import EmailOTP,Task
 from secrets import randbelow
 from django.utils import timezone
 from datetime import timedelta
@@ -150,3 +150,23 @@ def otp_verification(request):
         "success": True,
         "message": "OTP verified successfully"
     })
+
+@require_POST
+def reminder(request):
+    title = request.POST.get("title")
+    description = request.POST.get("description")
+    date = request.POST.get("date")
+    time = request.POST.get("time")
+
+    Task.objects.create(
+        title = title,
+        description = description,
+        date = date,
+        time = time,
+        user = request.user
+    )
+
+    return JsonResponse({
+            "success": True,
+            "message": "Task saved"
+        })

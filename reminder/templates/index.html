@@ -24,10 +24,11 @@
                 <p>{{ request.user.email }}</p>
                 <hr>
 
-                <form action="" method="post">
+                <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <span><a href="{% url 'logout' %}">Log Out</a></span>
+                    <span>Log Out</span>
                 </form>
+
             </div>
         </div>
     </header>
@@ -62,26 +63,26 @@
                 <button class="close" onclick="closeModal()">×</button>
             </div>
 
-            <form id="taskForm">
-
+            <form id="taskForm" method="POST" action="{% url 'reminder' %}">
+                {% csrf_token %}
                 <div class="form-group">
                     <label>Task Title</label>
-                    <input type="text" id="title" placeholder="Enter task title" required>
+                    <input type="text" id="title" placeholder="Enter task title" name="title" required>
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea id="description" placeholder="Write task details..."></textarea>
+                    <textarea id="description" placeholder="Write task details..." name="description"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Date</label>
-                    <input type="date" id="date" required>
+                    <input type="date" name="date" id="date" required >
                 </div>
 
                 <div class="form-group">
                     <label>Time</label>
-                    <input type="time" id="time" required>
+                    <input type="time"  name="time" id="time" required>
                 </div>
 
                 <div class="form-actions">
@@ -131,68 +132,6 @@
             document.getElementById("taskForm").reset();
         }
 
-
-        document.getElementById("taskForm").addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            let title = document.getElementById("title").value.trim();
-            let description = document.getElementById("description").value.trim();
-            let date = document.getElementById("date").value;
-            let time = document.getElementById("time").value;
-
-            if (!title || !date || !time) {
-                return;
-            }
-
-            let taskList = document.getElementById("taskList");
-
-            if (taskList.querySelector(".empty")) {
-                taskList.innerHTML = "";
-            }
-
-            let div = document.createElement("div");
-            div.className = "task-item";
-
-            let checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-
-            let content = document.createElement("div");
-            content.className = "task-content";
-
-            let heading = document.createElement("h3");
-            heading.textContent = title;
-
-            let desc = document.createElement("p");
-            desc.textContent = description || "No description";
-
-            let schedule = document.createElement("small");
-            schedule.textContent = "📅 " + date + " | ⏰ " + time;
-
-            content.append(heading, desc, schedule);
-
-            checkbox.addEventListener("change", function () {
-                div.classList.toggle("completed", checkbox.checked);
-            });
-
-            let deleteBtn = document.createElement("button");
-            deleteBtn.className = "delete-btn";
-            deleteBtn.textContent = "×";
-
-            deleteBtn.addEventListener("click", function () {
-                div.remove();
-
-                if (taskList.children.length === 0) {
-                    taskList.innerHTML =
-                        '<p class="empty">No tasks added yet.</p>';
-                }
-            });
-
-            div.append(checkbox, content, deleteBtn);
-
-            taskList.appendChild(div);
-            closeModal();
-        });
-
         document.getElementById("taskModal").addEventListener(
             "click",
             function (event) {
@@ -222,4 +161,5 @@
     </script>
 
 </body>
+
 </html>

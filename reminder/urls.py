@@ -7,4 +7,5 @@ urlpatterns = [
     path('otp_verification/',views.otp_verification,name="otp_verification"),
     path('home/',views.home,name="home page"),
     path('logout/', views.user_logout, name='logout'),
+    path('reminder/', views.reminder, name='reminder'),
 ]
