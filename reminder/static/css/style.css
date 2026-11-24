@@ -90,9 +90,27 @@ header {
     box-shadow: 0 4px 15px #9C812010;
 }
 
-.task-item input {
-    margin-top: 4px;
-    accent-color: #D5A91E;
+.task-item button {
+    background-color: #f5d4d4;
+    color: #0a0a0a;
+    border: 1px solid #ff4b4b;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.task-item span {
+    background-color: #f5f2d4;
+    color: #0a0a0a;
+    border: 1px solid #f5d837;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
 .task-content {
@@ -288,11 +306,6 @@ header {
     display: inline-block;
     margin-top: 7px;
 }
-
-.profile-dropdown form span a{
-    text-decoration: none;
-}
-
 
 @media(max-width: 600px) {
     .main {
