@@ -50,18 +50,20 @@
             <div id="taskList">
                 {% for task in tasks %}
 
-                <div class="task-item">
+                <div class="task-item" data-date="{{ task.date|date:'Y-m-d' }}" data-time="{{ task.time|time:'H:i' }}">
 
                     <div class="task-content">
                         <h3>{{ task.title }}</h3>
                         <p>{{ task.description|default:"No description" }}</p>
-                        <small>📅 {{ task.date }} | ⏰ {{ task.time }}</small>
+                        <small>📅{{task.date }} | ⏰ {{ task.time }}</small>
                     </div>
 
                     <form action="{% url 'delete_task' task.id%}" method="POST">
                         {% csrf_token %}
                         <button type="submit">Delete</button>
                     </form>
+
+                    <span class="complate_status">Not Complated</span>
 
                 </div>
 
@@ -178,7 +180,21 @@
 
         });
 
+        const tasks = document.querySelectorAll(".task-item");
 
+        tasks.forEach(task => {
+            const status = task.querySelector(".complate_status");
+
+            const date = task.dataset.date;
+            const time = task.dataset.time;
+
+            const taskDateTime = new Date(`${date}T${time}`);
+            let currentDateTime = new Date();
+
+            if (currentDateTime > taskDateTime) {
+                status.innerText = "Completed";
+            }
+        });
     </script>
 
 </body>
