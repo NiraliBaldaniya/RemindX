@@ -20,7 +20,9 @@ def home(request):
     name = email.split("@")[0] if email else "Remindian"
     name = re.sub(r'\d+$', '', name)
 
-    return render(request, 'index.html', {'name': name })
+    tasks = Task.objects.filter(user=request.user).order_by('date', 'time')
+
+    return render(request, 'index.html', {'name': name, 'tasks' : tasks })
 
 
 def login(request):
@@ -166,7 +168,4 @@ def reminder(request):
         user = request.user
     )
 
-    return JsonResponse({
-            "success": True,
-            "message": "Task saved"
-        })
+    return redirect('/')
