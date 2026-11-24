@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from .models import EmailOTP,Task
@@ -168,4 +168,11 @@ def reminder(request):
         user = request.user
     )
 
-    return redirect('/')
+    return redirect('/home')
+
+@login_required(login_url='/')
+@require_POST
+def delete_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id, user=request.user)
+    task.delete()
+    return redirect('/home')

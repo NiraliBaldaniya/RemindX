@@ -8,4 +8,5 @@ urlpatterns = [
     path('home/',views.home,name="home page"),
     path('logout/', views.user_logout, name='logout'),
     path('reminder/', views.reminder, name='reminder'),
+    path('delete-task/<int:task_id>/', views.delete_task, name='delete_task'),
 ]

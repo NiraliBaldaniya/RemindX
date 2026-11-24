@@ -24,7 +24,7 @@
                 <p>{{ request.user.email }}</p>
                 <hr>
 
-                <form  method="post">
+                <form method="post">
                     {% csrf_token %}
                     <span><a href="{% url 'logout' %}">Log Out</a></span>
                 </form>
@@ -52,12 +52,16 @@
 
                 <div class="task-item">
 
-                    <input type="checkbox">
                     <div class="task-content">
                         <h3>{{ task.title }}</h3>
                         <p>{{ task.description|default:"No description" }}</p>
                         <small>📅 {{ task.date }} | ⏰ {{ task.time }}</small>
                     </div>
+
+                    <form action="{% url 'delete_task' task.id%}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
 
                 </div>
 
