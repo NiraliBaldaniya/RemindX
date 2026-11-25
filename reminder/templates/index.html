@@ -195,8 +195,19 @@
                 status.innerText = "Completed";
             }
         });
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("{% static 'service-worker.js' %}")
+                .then(function (registration) {
+                    console.log("Service Worker Registered!", registration);
+                })
+                .catch(function (error) {
+                    console.log("service worker not found", error);
+                })
+        }
+
+        Notification.requestPermission();
+        
     </script>
-
 </body>
-
 </html>
