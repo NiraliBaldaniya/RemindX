@@ -99,6 +99,12 @@ LOGOUT_REDIRECT_URL = '/'
 WSGI_APPLICATION = 'myapp.wsgi.application'
 
 
+VAPID_PUBLIC_KEY = os.environ.get('VAPID_PUBLIC_KEY_PATH')
+VAPID_PRIVATE_KEY = os.environ.get('VAPID_PRIVATE_KEY_PATH')
+VAPID_SUBJECT = os.environ.get('VAPID_SUBJECT')
+
+
+
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
