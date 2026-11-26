@@ -20,3 +20,9 @@ class EmailOTP(models.Model):
 
     def __str__(self):
         return self.email
+
+
+class PushSubscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="push_subscriptions")
+    subscription = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
